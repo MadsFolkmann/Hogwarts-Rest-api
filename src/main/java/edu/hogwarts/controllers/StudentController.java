@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Map;
 
 @RestController
 public class StudentController {
@@ -35,16 +36,28 @@ public class StudentController {
     }
 
     @GetMapping("/students/{id}")
-    public ResponseEntity<Student> getStudent(@PathVariable int id) {
-        Optional<Student> student = studentRepository.findById(id);
-        return ResponseEntity.of(student);
+    public ResponseEntity<StudentRequestDto> getStudent(@PathVariable int id) {
+        Optional<Student> studentOptional = studentRepository.findById(id);
+        if (studentOptional.isPresent()) {
+            StudentRequestDto studentRequestDto = StudentRequestDto.fromStudent(studentOptional.get());
+            return new ResponseEntity<>(studentRequestDto, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PostMapping("/students")
     @ResponseStatus(HttpStatus.CREATED)
-    public Student createStudent(@RequestBody Student student) {
-        if (student.getHouse().isPresent()) {
-            student.setHouse(student.getHouse().get());
+    public Student createStudent(@RequestBody StudentRequestDto StudentRequestDto) {
+        String[] nameParts = StudentRequestDto.getFullName().split(" ");
+        String firstName = nameParts[0];
+        String middleName = nameParts.length > 2 ? nameParts[1] : null;
+        String lastName = nameParts[nameParts.length - 1];
+
+        Optional<House> house = houseRepository.findFirstByName(StudentRequestDto.getHouseName());
+
+        if (house.isPresent()) {
+            Student student = new Student(firstName, middleName, lastName, StudentRequestDto.getDateOfBirth(), house.get(), StudentRequestDto.isPrefect(), StudentRequestDto.getEnrollmentYear(), StudentRequestDto.getGraduationYear(), StudentRequestDto.isGraduated());
             return studentRepository.save(student);
         }
         return null;
@@ -60,6 +73,33 @@ public class StudentController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @PatchMapping("/students/{id}")
+    public ResponseEntity<Student> updatePathStudent(@PathVariable int id, @RequestBody Map<String, Object> updates) {
+        Optional<Student> studentOptional = studentRepository.findById(id);
+        if (!studentOptional.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        Student student = studentOptional.get();
+
+        if (updates.containsKey("isPrefect")) {
+            student.setPrefect((Boolean) updates.get("isPrefect"));
+        }
+
+        if (updates.containsKey("schoolYear")) {
+            student.setSchoolYear((Integer) updates.get("schoolYear"));
+        }
+
+        if (updates.containsKey("graduationYear")) {
+            student.setGraduationYear((Integer) updates.get("graduationYear"));
+            student.setGraduated(true);
+        }
+
+        studentRepository.save(student);
+
+        return new ResponseEntity<>(student, HttpStatus.OK);
     }
 
     @DeleteMapping("/students/{id}")

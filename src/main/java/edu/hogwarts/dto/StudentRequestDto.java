@@ -14,6 +14,7 @@ public class StudentRequestDto {
     private int enrollmentYear;
     private int graduationYear;
     private  boolean graduated;
+    private int schoolYear;
 
     public static StudentRequestDto fromStudent(Student student) {
         StudentRequestDto studentDto = new StudentRequestDto();
@@ -26,7 +27,41 @@ public class StudentRequestDto {
         studentDto.setEnrollmentYear(student.getEnrollmentYear());
         studentDto.setGraduationYear(student.getGraduationYear());
         studentDto.setGraduated(student.isGraduated());
+        studentDto.setSchoolYear(student.getSchoolYear());
         return studentDto;
+    }
+
+    public int getSchoolYear() {
+        return schoolYear;
+    }
+
+    public void setSchoolYear(int schoolYear) {
+        this.schoolYear = schoolYear;
+    }
+
+    public boolean hasMiddleName(){
+        return middlename != null;
+    }
+
+    public String getFullName(){
+        if(hasMiddleName()) {
+            return firstname + " " + middlename + " " + lastname;
+        } else{
+            return firstname + " " + lastname;
+        }
+    }
+
+    public void setFullName(String fullName){
+        String[] parts = fullName.split(" ");
+        firstname = parts[0];
+        lastname = parts[parts.length - 1];
+
+        if (parts.length > 1){
+            middlename = parts[1];
+        } else {
+            middlename = null;
+        }
+
     }
 
     public String getFirstname() {

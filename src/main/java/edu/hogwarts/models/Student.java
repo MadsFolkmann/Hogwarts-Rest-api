@@ -20,8 +20,22 @@ public class Student {
     private int enrollmentYear;
     private int graduationYear;
     private  boolean graduated;
+    private int schoolYear;
 
     public Student() {
+    }
+
+    public Student(String firstName, String middleName, String lastName, Date dateOfBirth, House house, boolean prefect, int enrollmentYear, int graduationYear, boolean graduated, int schoolYear) {
+        this.firstName = firstName;
+        this.middleName = middleName;
+        this.lastName = lastName;
+        this.dateOfBirth = dateOfBirth;
+        this.house = house;
+        this.prefect = prefect;
+        this.enrollmentYear = enrollmentYear;
+        this.graduationYear = graduationYear;
+        this.graduated = graduated;
+        this.schoolYear = schoolYear;
     }
 
     public Student(String firstName, String middleName, String lastName, Date dateOfBirth, House house, boolean prefect, int enrollmentYear, int graduationYear, boolean graduated) {
@@ -36,13 +50,37 @@ public class Student {
         this.graduated = graduated;
     }
 
-
     public int getId() {
         return id;
     }
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public boolean hasMiddleName(){
+        return middleName != null;
+    }
+
+    public String getFullName(){
+        if(hasMiddleName()) {
+            return firstName + " " + middleName + " " + lastName;
+        } else{
+            return firstName + " " + lastName;
+        }
+    }
+
+    public void setFullName(String fullName){
+        String[] parts = fullName.split(" ");
+        firstName = parts[0];
+        lastName = parts[parts.length - 1];
+
+        if (parts.length > 1){
+            middleName = parts[1];
+        } else {
+            middleName = null;
+        }
+
     }
 
     public String getFirstName() {
@@ -115,5 +153,13 @@ public class Student {
 
     public void setGraduated(boolean graduated) {
         this.graduated = graduated;
+    }
+
+    public int getSchoolYear() {
+        return schoolYear;
+    }
+
+    public void setSchoolYear(int schoolYear) {
+        this.schoolYear = schoolYear;
     }
 }
