@@ -1,5 +1,6 @@
 package edu.hogwarts.controllers;
 
+import edu.hogwarts.dto.StudentRequestDto;
 import edu.hogwarts.models.House;
 import edu.hogwarts.models.Student;
 import edu.hogwarts.repositories.HouseRepository;
@@ -8,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,8 +25,13 @@ public class StudentController {
     }
 
     @GetMapping("/students")
-    public List<Student> getStudents() {
-        return studentRepository.findAll();
+    public List<StudentRequestDto> getStudents() {
+        List<Student> students = studentRepository.findAll();
+        List<StudentRequestDto> studentDtos = new ArrayList<>();
+        for (Student student : students) {
+            studentDtos.add(StudentRequestDto.fromStudent(student));
+        }
+        return studentDtos;
     }
 
     @GetMapping("/students/{id}")
@@ -36,13 +43,11 @@ public class StudentController {
     @PostMapping("/students")
     @ResponseStatus(HttpStatus.CREATED)
     public Student createStudent(@RequestBody Student student) {
-        House house = houseRepository.findById(student.getHouse().getId()).orElse(null);
-        if (house != null) {
-            student.setHouse(house);
+        if (student.getHouse().isPresent()) {
+            student.setHouse(student.getHouse().get());
             return studentRepository.save(student);
-        } else {
-            return null;
         }
+        return null;
     }
 
     @PutMapping("/students/{id}")

@@ -3,6 +3,7 @@ package edu.hogwarts.models;
 import jakarta.persistence.*;
 
 import java.util.Date;
+import java.util.Optional;
 
 @Entity
 public class Student {
@@ -76,8 +77,8 @@ public class Student {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public House getHouse() {
-        return house;
+    public Optional<House> getHouse() {
+        return Optional.ofNullable(house);
     }
 
     public void setHouse(House house) {

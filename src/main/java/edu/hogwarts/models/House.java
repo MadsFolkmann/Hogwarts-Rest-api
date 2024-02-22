@@ -1,5 +1,6 @@
 package edu.hogwarts.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -7,26 +8,26 @@ import java.util.List;
 @Entity
 public class House {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
     private String name;
     private String founder;
-    @ElementCollection
-    private List<String> colors;
+    @JsonIgnore
+    private String color1;
+    @JsonIgnore
+    private String color2;
 
-    public House(String name, String founder, List<String> colors) {
+
+    public House(String name, String founder, String color1, String color2) {
         this.name = name;
         this.founder = founder;
-        this.colors = colors;
+        this.color1 = color1;
+        this.color2 = color2;
+
     }
 
     public House() {
 
     }
 
-    public int getId() {
-        return id;
-    }
     public String getName() {
         return name;
     }
@@ -43,7 +44,12 @@ public class House {
         this.founder = founder;
     }
 
-    public List<String> getColors() {
-        return colors;
+    public String[] getColors() {
+        return new String[]{color1, color2};
+    }
+
+    public void setColors(String[] colors) {
+        this.color1 = colors[0];
+        this.color2 = colors[1];
     }
 }
