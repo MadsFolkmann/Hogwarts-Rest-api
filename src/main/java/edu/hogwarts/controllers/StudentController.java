@@ -1,5 +1,6 @@
 package edu.hogwarts.controllers;
 
+import edu.hogwarts.services.StudentService;
 import edu.hogwarts.dto.StudentRequestDto;
 import edu.hogwarts.models.House;
 import edu.hogwarts.models.Student;
@@ -17,17 +18,17 @@ import java.util.Map;
 @RestController
 public class StudentController {
 
-    private StudentRepository studentRepository;
+    private StudentService studentService;
     private HouseRepository houseRepository;
 
-    public StudentController(StudentRepository studentRepository, HouseRepository houseRepository) {
-        this.studentRepository = studentRepository;
+    public StudentController(StudentService studentService, HouseRepository houseRepository) {
+        this.studentService = studentService;
         this.houseRepository = houseRepository;
     }
 
     @GetMapping("/students")
     public List<StudentRequestDto> getStudents() {
-        List<Student> students = studentRepository.findAll();
+        Iterable<Student> students = studentService.findAll();
         List<StudentRequestDto> studentDtos = new ArrayList<>();
         for (Student student : students) {
             studentDtos.add(StudentRequestDto.fromStudent(student));
@@ -37,7 +38,7 @@ public class StudentController {
 
     @GetMapping("/students/{id}")
     public ResponseEntity<StudentRequestDto> getStudent(@PathVariable int id) {
-        Optional<Student> studentOptional = studentRepository.findById(id);
+        Optional<Student> studentOptional = studentService.findById(id);
         if (studentOptional.isPresent()) {
             StudentRequestDto studentRequestDto = StudentRequestDto.fromStudent(studentOptional.get());
             return new ResponseEntity<>(studentRequestDto, HttpStatus.OK);
@@ -58,26 +59,19 @@ public class StudentController {
 
         if (house.isPresent()) {
             Student student = new Student(firstName, middleName, lastName, StudentRequestDto.getDateOfBirth(), house.get(), StudentRequestDto.isPrefect(), StudentRequestDto.getEnrollmentYear(), StudentRequestDto.getGraduationYear(), StudentRequestDto.isGraduated());
-            return studentRepository.save(student);
+            return studentService.save(student);
         }
         return null;
     }
 
     @PutMapping("/students/{id}")
     public ResponseEntity<Student> updateStudent(@PathVariable int id, @RequestBody Student student) {
-        Optional<Student> studentOptional = studentRepository.findById(id);
-        if (studentOptional.isPresent()) {
-            student.setId(id);
-            studentRepository.save(student);
-            return ResponseEntity.ok(student);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.of(studentService.updateIfExist(id, student));
     }
 
     @PatchMapping("/students/{id}")
     public ResponseEntity<Student> updatePathStudent(@PathVariable int id, @RequestBody Map<String, Object> updates) {
-        Optional<Student> studentOptional = studentRepository.findById(id);
+        Optional<Student> studentOptional = studentService.findById(id);
         if (!studentOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -97,16 +91,14 @@ public class StudentController {
             student.setGraduated(true);
         }
 
-        studentRepository.save(student);
+        studentService.save(student);
 
         return new ResponseEntity<>(student, HttpStatus.OK);
     }
 
     @DeleteMapping("/students/{id}")
     public ResponseEntity<Student> deleteStudent(@PathVariable int id) {
-        Optional<Student> student = studentRepository.findById(id);
-        studentRepository.deleteById(id);
-        return ResponseEntity.of(student);
+        return ResponseEntity.of(studentService.deleteById(id));
     }
 }
 
