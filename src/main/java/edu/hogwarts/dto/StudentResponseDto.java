@@ -4,7 +4,7 @@ import edu.hogwarts.models.Student;
 
 import java.util.Date;
 
-public class StudentRequestDto {
+public class StudentResponseDto {
     private int id;
     private String firstname;
     private String middlename;
@@ -16,6 +16,7 @@ public class StudentRequestDto {
     private int graduationYear;
     private  boolean graduated;
     private int schoolYear;
+
 
 
     public int getId() {
@@ -131,4 +132,3 @@ public class StudentRequestDto {
         this.graduated = graduated;
     }
 }
-

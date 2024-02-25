@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.Optional;
 
-public interface HouseRepository extends JpaRepository<House, Integer> {
+public interface HouseRepository extends JpaRepository<House, String> {
     @Query("SELECT h FROM House h WHERE h.name LIKE %:houseName%")
     List<House> findByName(@Param("houseName") String houseName);
 

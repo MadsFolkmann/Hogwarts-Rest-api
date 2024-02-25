@@ -18,7 +18,7 @@ public class InitData implements CommandLineRunner {
     private TeacherRepository teacherRepository;
     private HouseRepository houseRepository;
 
-    public InitData(StudentRepository studentRepository, CourseRepository courseRepository, TeacherRepository teacherRepository, HouseRepository houseRepository){
+    public InitData(StudentRepository studentRepository, CourseRepository courseRepository, TeacherRepository teacherRepository, HouseRepository houseRepository) {
         this.studentRepository = studentRepository;
         this.courseRepository = courseRepository;
         this.teacherRepository = teacherRepository;
@@ -41,18 +41,18 @@ public class InitData implements CommandLineRunner {
 
         //Students
         Set<Student> students = new HashSet<>();
-        students.add(new Student("Harry", "James", "Potter", new Date(), gryffindor, true, 1991, 1998, true));
-        students.add(new Student("Hermione", "", "Granger", new Date(), gryffindor, false, 1991, 1998, true));
-        students.add(new Student("Ron", "Bilius", "Weasley", new Date(), gryffindor, false, 1991, 1998, true));
-        students.add(new Student("Draco", "", "Malfoy", new Date(), slytherin, false, 1991, 1998, true));
-        students.add(new Student("Luna", "", "Lovegood", new Date(), ravenclaw, false, 1992, 1999, true));
-        students.add(new Student("Neville", "", "Longbottom", new Date(), gryffindor, false, 1991, 1998, true));
-        students.add(new Student("Ginny", "Molly", "Weasley", new Date(), gryffindor, false, 1992, 1999, true));
-        students.add(new Student("Fred", "", "Weasley", new Date(), gryffindor, false, 1991, 1998, true));
-        students.add(new Student("George", "", "Weasley", new Date(), gryffindor, false, 1991, 1998, true));
-        students.add(new Student("Cedric", "", "Diggory", new Date(), hufflepuff, true, 1991, 1998, true));
-        students.add(new Student("Cho", "", "Chang", new Date(), ravenclaw, false, 1992, 1999, true));
-        students.add(new Student("Vincent", "", "Crabbe", new Date(), slytherin, false, 1991, 1998, true));
+        students.add(new Student("Harry", "James", "Potter", new Date(), gryffindor, true, 1991, 1998, true, 1991));
+        students.add(new Student("Hermione", "", "Granger", new Date(), gryffindor, false, 1991, 1998, true, 1991));
+        students.add(new Student("Ron", "Bilius", "Weasley", new Date(), gryffindor, false, 1991, 1998, true, 1991));
+        students.add(new Student("Draco", "", "Malfoy", new Date(), slytherin, false, 1991, 1998, true, 1991));
+        students.add(new Student("Luna", "", "Lovegood", new Date(), ravenclaw, false, 1992, 1999, true, 1992));
+        students.add(new Student("Neville", "", "Longbottom", new Date(), gryffindor, false, 1991, 1998, true, 1991));
+        students.add(new Student("Ginny", "Molly", "Weasley", new Date(), gryffindor, false, 1992, 1999, true, 1992));
+        students.add(new Student("Fred", "", "Weasley", new Date(), gryffindor, false, 1991, 1998, true, 1991));
+        students.add(new Student("George", "", "Weasley", new Date(), gryffindor, false, 1991, 1998, true, 1991));
+        students.add(new Student("Cedric", "", "Diggory", new Date(), hufflepuff, true, 1991, 1998, true, 1991));
+        students.add(new Student("Cho", "", "Chang", new Date(), ravenclaw, false, 1992, 1999, true, 1992));
+        students.add(new Student("Vincent", "", "Crabbe", new Date(), slytherin, false, 1991, 1998, true, 1991));
         studentRepository.saveAll(students);
 
         //courses
