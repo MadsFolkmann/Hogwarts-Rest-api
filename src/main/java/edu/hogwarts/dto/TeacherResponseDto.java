@@ -4,7 +4,7 @@ import edu.hogwarts.models.EmpType;
 
 import java.util.Date;
 
-public class TeacherRequestDto {
+public class TeacherResponseDto {
     private int id;
     private String firstName;
     private String middleName;

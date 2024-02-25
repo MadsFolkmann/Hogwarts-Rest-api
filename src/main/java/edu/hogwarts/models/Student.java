@@ -38,6 +38,21 @@ public class Student {
         this.schoolYear = schoolYear;
     }
 
+    public Student(String fullName, Date dateOfBirth, House house, boolean prefect, int enrollmentYear, int graduationYear, boolean graduated, int schoolYear) {
+
+        String[] nameParts = fullName.split(" ");
+        this.firstName = nameParts[0];
+        this.middleName = nameParts.length > 2 ? nameParts[1] : null;
+        this.lastName = nameParts[nameParts.length - 1];
+        this.dateOfBirth = dateOfBirth;
+        this.house = house;
+        this.prefect = prefect;
+        this.enrollmentYear = enrollmentYear;
+        this.graduationYear = graduationYear;
+        this.graduated = graduated;
+        this.schoolYear = schoolYear;
+    }
+
     public Student(String firstName, String middleName, String lastName, Date dateOfBirth, House house, boolean prefect, int enrollmentYear, int graduationYear, boolean graduated) {
         this.firstName = firstName;
         this.middleName = middleName;
@@ -162,4 +177,7 @@ public class Student {
     public void setSchoolYear(int schoolYear) {
         this.schoolYear = schoolYear;
     }
+
+
+
 }
