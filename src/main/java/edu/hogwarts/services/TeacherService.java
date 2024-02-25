@@ -2,12 +2,17 @@ package edu.hogwarts.services;
 
 import edu.hogwarts.dto.TeacherRequestDto;
 import edu.hogwarts.dto.TeacherResponseDto;
+import edu.hogwarts.models.EmpType;
 import edu.hogwarts.models.House;
 import edu.hogwarts.models.Teacher;
 import edu.hogwarts.repositories.HouseRepository;
 import edu.hogwarts.repositories.TeacherRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+import java.util.Map;
 import java.util.Optional;
 import java.util.List;
 
@@ -43,7 +48,6 @@ public class TeacherService {
         return null;
     }
 
-
     public Optional<TeacherResponseDto> updateIfExist(int id, TeacherRequestDto teacherDto) {
         if (teacherRepository.existsById(id)) {
             Teacher entity = toEntity(teacherDto);
@@ -52,6 +56,31 @@ public class TeacherService {
         } else {
             return Optional.empty();
         }
+    }
+
+    public Optional<ResponseEntity<TeacherResponseDto>> patchIfExist(int id, Map<String, Object> updates) {
+        Optional<Teacher> teacherOptional = teacherRepository.findById(id);
+        if (!teacherOptional.isPresent()) {
+            return Optional.empty();
+        }
+
+        Teacher teacher = teacherOptional.get();
+
+        if (updates.containsKey("headOfHouse")) {
+            teacher.setHeadOfHouse((Boolean) updates.get("headOfHouse"));
+        }
+
+        if (updates.containsKey("employmentEnd")) {
+            teacher.setEmploymentEnd((Date) updates.get("employmentEnd"));
+        }
+
+        if (updates.containsKey("employment")) {
+            teacher.setEmployment(EmpType.valueOf((String) updates.get("employment")));
+        }
+
+        teacherRepository.save(teacher);
+
+        return Optional.of(new ResponseEntity<>(toDTO(teacher), HttpStatus.OK));
     }
 
     public Optional<TeacherResponseDto> deleteById(int id) {
@@ -90,9 +119,5 @@ public class TeacherService {
         house.ifPresent(entity::setHouse);
 
         return entity;
-
-
-
-
     }
 }

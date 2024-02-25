@@ -62,7 +62,7 @@ public class StudentService {
         return existinStudent;
     }
 
-    public Optional<ResponseEntity<Student>> patchIfExist(int id, Map<String, Object> updates) {
+    public Optional<ResponseEntity<StudentResponseDto>> patchIfExist(int id, Map<String, Object> updates) {
         Optional<Student> studentOptional = studentRepository.findById(id);
         if (!studentOptional.isPresent()) {
             return Optional.empty();
@@ -85,7 +85,7 @@ public class StudentService {
 
         studentRepository.save(student);
 
-        return Optional.of(new ResponseEntity<>(student, HttpStatus.OK));
+        return Optional.of(new ResponseEntity<>(toDTO(student), HttpStatus.OK));
     }
 
     public StudentResponseDto toDTO(Student entity) {

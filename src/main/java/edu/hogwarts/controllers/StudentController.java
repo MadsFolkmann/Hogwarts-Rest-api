@@ -42,7 +42,7 @@ public class StudentController {
     }
 
     @PatchMapping("/students/{id}")
-    public ResponseEntity<Student> updatePathStudent(@PathVariable int id, @RequestBody Map<String, Object> updates) {
+    public ResponseEntity<StudentResponseDto> updatePathStudent(@PathVariable int id, @RequestBody Map<String, Object> updates) {
         return studentService.patchIfExist(id, updates).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
